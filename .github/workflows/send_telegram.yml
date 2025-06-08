@@ -21,6 +21,10 @@ jobs:
         with:
           python-version: '3.11'  # or your preferred version
 
+      - name: Debug — list files
+        run: ls -al
+
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
