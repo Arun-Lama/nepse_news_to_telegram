@@ -14,34 +14,19 @@ import re
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime
 
-def get_chrome_version_mac():
-    """Fetch installed Chrome version on macOS"""
-    try:
-        output = subprocess.check_output(
-            ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"]
-        ).decode("utf-8")
-        match = re.search(r"(\d+\.\d+\.\d+\.\d+)", output)
-        return match.group(1) if match else None
-    except Exception as e:
-        print("Error detecting Chrome version:", e)
-        return None
-
 def sharesansar_news():
-    # Set up Chrome options (headless optional)
     options = Options()
-    options.add_argument("--headless")  # Remove this line if you want to see browser
-    options.add_argument("--no-sandbox")
+    options.add_argument("--headless")  # Headless mode for GitHub Actions
+    options.add_argument("--no-sandbox")  # Required for Docker/Linux environments
     options.add_argument("--disable-dev-shm-usage")
-
-    chrome_version = get_chrome_version_mac()
-    if not chrome_version:
-        raise Exception("Could not detect Chrome version. Make sure Chrome is installed correctly.")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920x1080")
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get('https://www.sharesansar.com/category/latest')
 
     blank_list = []
-    total_pages = 4  # Pages to scrape
+    total_pages = 4
 
     for i in range(total_pages):
         try:
@@ -49,8 +34,7 @@ def sharesansar_news():
                 EC.presence_of_element_located((By.CLASS_NAME, 'newslist'))
             )
 
-            html = driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
             news_container = soup.find('div', class_='newslist')
 
             for item in news_container.find_all('div', class_='featured-news-list margin-bottom-15'):
@@ -67,7 +51,6 @@ def sharesansar_news():
 
             print(f"Scraped Page {i + 1}")
 
-            # Go to next page if not last
             if i < total_pages - 1:
                 next_button = WebDriverWait(driver, 5).until(
                     EC.element_to_be_clickable((By.LINK_TEXT, 'Next »'))
@@ -93,8 +76,11 @@ def sharesansar_news():
     )
 
     today = pd.Timestamp.today().normalize()
-    sharesansar_today = sharesansar_news_df[sharesansar_news_df['Published Date'].dt.normalize() == today]
+    sharesansar_today = sharesansar_news_df[
+        sharesansar_news_df['Published Date'].dt.normalize() == today
+    ]
     return sharesansar_today
+
 
 
 
