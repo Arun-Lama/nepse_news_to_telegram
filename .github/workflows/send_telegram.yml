@@ -7,6 +7,8 @@ on:
     # - cron: '15 7 * * *'   # 1:00 PM NPT
     # - cron: '30 14 * * *'  # 8:15 PM NPT
     - cron: '20 10 * * *'  # 8:15 PM NPT
+    - cron: '20 11 * * *'  # 8:15 PM NPT
+    - cron: '20 12 * * *'  # 8:15 PM NPT
 
   workflow_dispatch:        # Allows manual triggering from GitHub UI
 
