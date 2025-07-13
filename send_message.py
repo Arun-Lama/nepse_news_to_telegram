@@ -23,9 +23,8 @@ merolagani_announcement_df = merolagani_announcement()
 tomorrow_events_df = tomorrow_events()
 
 # --- Combine and Format News DataFrame ---
-sharesansar_and_bizmandu_news = pd.concat([sharesansar_news_df, bizmandu_news_df])
-sharesansar_and_bizmandu_news['Published Date'] = pd.to_datetime(
-    sharesansar_and_bizmandu_news['Published Date']
+sharesansar_news_df['Published Date'] = pd.to_datetime(
+    sharesansar_news_df['Published Date']
 ).dt.floor('D')
 
 
@@ -128,10 +127,10 @@ def get_time_based_greeting():
 
 
 # --- Construct Messages ---
-if sharesansar_and_bizmandu_news.empty:
+if sharesansar_news_df.empty:
     news_message = "<b>🗞️ Market News</b>\n\nThere’s no major news today."
 else:
-    news_message = format_news(sharesansar_and_bizmandu_news, "🗞️ Market News")
+    news_message = format_news(sharesansar_news_df, "🗞️ Market News")
 
 if merolagani_announcement_df.empty:
     announcements_message = "<b>📢 Announcements Today</b>\n\nNo new announcements today."
