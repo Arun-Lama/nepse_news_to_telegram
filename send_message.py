@@ -7,7 +7,6 @@ import pytz
 
 from sharesansar_and_bizmandu import (
     sharesansar_news,
-    bizmandu_news,
     merolagani_announcement,
     tomorrow_events
 )
@@ -20,7 +19,6 @@ TELEGRAM_MSG_LIMIT = 4096  # Telegram max message length
 
 # --- Fetch DataFrames ---
 sharesansar_news_df = sharesansar_news()
-bizmandu_news_df = bizmandu_news()
 merolagani_announcement_df = merolagani_announcement()
 tomorrow_events_df = tomorrow_events()
 
